@@ -1,0 +1,25 @@
+{
+  "name": "st-preset-dismantle",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Dissects SillyTavern Chat Completion presets using SillyTavern's own dry-run prompt assembly.",
+  "license": "AGPL-3.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "setup:st": "scripts/setup-st.sh",
+    "test": "node --test test/unit/*.test.js",
+    "test:e2e": "node --test --test-concurrency=1 test/e2e/*.test.js",
+    "lint": "eslint .",
+    "dissect": "node cli/dissect.mjs",
+    "check": "node -e \"for (const f of process.argv.slice(1)) require('node:child_process').execFileSync(process.execPath, ['--check', f], {stdio: 'inherit'})\" extension/index.js extension/src/*.js cli/*.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "eslint": "9.39.4",
+    "globals": "16.5.0",
+    "playwright": "1.63.0"
+  }
+}

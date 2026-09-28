@@ -1,0 +1,11 @@
+{
+    "display_name": "Preset Dismantle",
+    "loading_order": 100,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "st-preset-dismantle",
+    "version": "0.1.0",
+    "homePage": "https://github.com/waslesy/st-preset-dismantle"
+}

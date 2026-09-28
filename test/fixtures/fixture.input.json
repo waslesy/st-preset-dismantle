@@ -1,0 +1,3424 @@
+{
+ "preset": {
+  "name": "PD Fixture",
+  "prompts": [
+   {
+    "name": "Main Prompt",
+    "system_prompt": true,
+    "role": "system",
+    "content": "Write {{char}}'s next reply in a fictional chat between {{char}} and {{user}}.",
+    "identifier": "main"
+   },
+   {
+    "name": "Auxiliary Prompt",
+    "system_prompt": true,
+    "role": "system",
+    "content": "",
+    "identifier": "nsfw"
+   },
+   {
+    "identifier": "dialogueExamples",
+    "name": "Chat Examples",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "name": "Post-History Instructions",
+    "system_prompt": true,
+    "role": "system",
+    "content": "",
+    "identifier": "jailbreak"
+   },
+   {
+    "identifier": "chatHistory",
+    "name": "Chat History",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "worldInfoAfter",
+    "name": "World Info (after)",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "worldInfoBefore",
+    "name": "World Info (before)",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "enhanceDefinitions",
+    "role": "system",
+    "name": "Enhance Definitions",
+    "content": "If you have more knowledge of {{char}}, add to the character's lore and personality to enhance them but keep the Character Sheet's definitions absolute.",
+    "system_prompt": true,
+    "marker": false
+   },
+   {
+    "identifier": "charDescription",
+    "name": "Char Description",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "charPersonality",
+    "name": "Char Personality",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "scenario",
+    "name": "Scenario",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "personaDescription",
+    "name": "Persona Description",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "rules",
+    "name": "写作规则",
+    "role": "system",
+    "content": "<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替{{user}}说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "rules2",
+    "name": "补充规则",
+    "role": "system",
+    "content": "- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替{{user}}说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "status",
+    "name": "状态栏",
+    "role": "system",
+    "content": "<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：{{getvar::affection}}</div>\n```\n</status>\n════════════════",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "vars",
+    "name": "变量初始化",
+    "role": "system",
+    "content": "{{setvar::affection::10}}{{setvar::mood::happy}}当前心情：{{getvar::mood}}\n{{// 这是注释，不会发送}}\n{{if .flag}}flag已设置{{/if}}\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "dupe",
+    "name": "重复规则",
+    "role": "system",
+    "content": "- 文风细腻，注重感官描写。",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "inchat0",
+    "name": "深度0-系统",
+    "role": "system",
+    "content": "[D0 系统注入：保持角色]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_position": 1,
+    "injection_depth": 0,
+    "injection_order": 100
+   },
+   {
+    "identifier": "inchat2a",
+    "name": "深度2-用户-低序",
+    "role": "user",
+    "content": "[D2 用户 order50 A]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_position": 1,
+    "injection_depth": 2,
+    "injection_order": 50
+   },
+   {
+    "identifier": "inchat2b",
+    "name": "深度2-用户-低序-同组",
+    "role": "user",
+    "content": "[D2 用户 order50 B]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_position": 1,
+    "injection_depth": 2,
+    "injection_order": 50
+   },
+   {
+    "identifier": "inchat2c",
+    "name": "深度2-助手-高序",
+    "role": "assistant",
+    "content": "[D2 助手 order200]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_position": 1,
+    "injection_depth": 2,
+    "injection_order": 200
+   },
+   {
+    "identifier": "impOnly",
+    "name": "仅扮演触发",
+    "role": "system",
+    "content": "[仅在 impersonate 时发送]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_trigger": [
+     "impersonate"
+    ]
+   },
+   {
+    "identifier": "contOnly",
+    "name": "仅续写触发",
+    "role": "system",
+    "content": "[仅在 continue 时发送]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_trigger": [
+     "continue"
+    ]
+   },
+   {
+    "identifier": "off",
+    "name": "已关闭",
+    "role": "system",
+    "content": "[这条已被关闭]",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "orphan",
+    "name": "孤立条目",
+    "role": "system",
+    "content": "[不在 prompt_order 中]",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "emptyMacro",
+    "name": "宏求值为空",
+    "role": "system",
+    "content": "{{trim}}",
+    "system_prompt": false,
+    "marker": false
+   }
+  ],
+  "prompt_order": [
+   {
+    "character_id": 100000,
+    "order": [
+     {
+      "identifier": "main",
+      "enabled": true
+     },
+     {
+      "identifier": "worldInfoBefore",
+      "enabled": true
+     },
+     {
+      "identifier": "charDescription",
+      "enabled": true
+     },
+     {
+      "identifier": "charPersonality",
+      "enabled": true
+     },
+     {
+      "identifier": "scenario",
+      "enabled": true
+     },
+     {
+      "identifier": "enhanceDefinitions",
+      "enabled": false
+     },
+     {
+      "identifier": "nsfw",
+      "enabled": true
+     },
+     {
+      "identifier": "worldInfoAfter",
+      "enabled": true
+     },
+     {
+      "identifier": "dialogueExamples",
+      "enabled": true
+     },
+     {
+      "identifier": "chatHistory",
+      "enabled": true
+     },
+     {
+      "identifier": "jailbreak",
+      "enabled": true
+     }
+    ]
+   },
+   {
+    "character_id": 100001,
+    "order": [
+     {
+      "identifier": "main",
+      "enabled": true
+     },
+     {
+      "identifier": "worldInfoBefore",
+      "enabled": true
+     },
+     {
+      "identifier": "personaDescription",
+      "enabled": true
+     },
+     {
+      "identifier": "charDescription",
+      "enabled": true
+     },
+     {
+      "identifier": "charPersonality",
+      "enabled": true
+     },
+     {
+      "identifier": "scenario",
+      "enabled": true
+     },
+     {
+      "identifier": "enhanceDefinitions",
+      "enabled": false
+     },
+     {
+      "identifier": "nsfw",
+      "enabled": true
+     },
+     {
+      "identifier": "worldInfoAfter",
+      "enabled": true
+     },
+     {
+      "identifier": "dialogueExamples",
+      "enabled": true
+     },
+     {
+      "identifier": "rules",
+      "enabled": true
+     },
+     {
+      "identifier": "rules2",
+      "enabled": true
+     },
+     {
+      "identifier": "status",
+      "enabled": true
+     },
+     {
+      "identifier": "vars",
+      "enabled": true
+     },
+     {
+      "identifier": "dupe",
+      "enabled": true
+     },
+     {
+      "identifier": "impOnly",
+      "enabled": true
+     },
+     {
+      "identifier": "contOnly",
+      "enabled": true
+     },
+     {
+      "identifier": "off",
+      "enabled": false
+     },
+     {
+      "identifier": "emptyMacro",
+      "enabled": true
+     },
+     {
+      "identifier": "chatHistory",
+      "enabled": true
+     },
+     {
+      "identifier": "jailbreak",
+      "enabled": true
+     },
+     {
+      "identifier": "inchat0",
+      "enabled": true
+     },
+     {
+      "identifier": "inchat2a",
+      "enabled": true
+     },
+     {
+      "identifier": "inchat2b",
+      "enabled": true
+     },
+     {
+      "identifier": "inchat2c",
+      "enabled": true
+     }
+    ]
+   }
+  ],
+  "extensions": {
+   "regex_scripts": [
+    {
+     "id": "pd-regex-1",
+     "scriptName": "隐藏状态栏",
+     "findRegex": "/<status>[\\s\\S]*?<\\/status>/g",
+     "replaceString": "",
+     "trimStrings": [],
+     "placement": [
+      2
+     ],
+     "disabled": false,
+     "markdownOnly": true,
+     "promptOnly": false,
+     "runOnEdit": true,
+     "substituteRegex": 0,
+     "minDepth": null,
+     "maxDepth": null
+    },
+    {
+     "id": "pd-regex-2",
+     "scriptName": "提示词替换",
+     "findRegex": "/foo/g",
+     "replaceString": "bar",
+     "trimStrings": [],
+     "placement": [
+      1,
+      2
+     ],
+     "disabled": false,
+     "markdownOnly": false,
+     "promptOnly": true,
+     "runOnEdit": false,
+     "substituteRegex": 0,
+     "minDepth": null,
+     "maxDepth": 2
+    }
+   ],
+   "some_other_extension": {
+    "foo": 1
+   }
+  }
+ },
+ "rawPreset": {
+  "chat_completion_source": "openai",
+  "openai_model": "gpt-5.6-terra",
+  "claude_model": "claude-sonnet-5",
+  "openrouter_model": "OR_Website",
+  "openrouter_use_fallback": false,
+  "openrouter_group_models": false,
+  "openrouter_sort_models": "alphabetically",
+  "ai21_model": "jamba-large",
+  "mistralai_model": "mistral-large-latest",
+  "chutes_model": "deepseek-ai/DeepSeek-V3-0324",
+  "chutes_sort_models": "alphabetically",
+  "minimax_model": "MiniMax-M2.7",
+  "minimax_endpoint": "global",
+  "electronhub_model": "gpt-4o-mini",
+  "electronhub_sort_models": "alphabetically",
+  "electronhub_group_models": false,
+  "custom_model": "",
+  "custom_url": "",
+  "custom_include_body": "",
+  "custom_exclude_body": "",
+  "custom_include_headers": "",
+  "google_model": "gemini-3.7-flash",
+  "vertexai_model": "gemini-3.7-flash",
+  "temperature": 1,
+  "frequency_penalty": 0,
+  "presence_penalty": 0,
+  "top_p": 1,
+  "top_k": 0,
+  "top_a": 0,
+  "min_p": 0,
+  "repetition_penalty": 1,
+  "openai_max_context": 4095,
+  "openai_max_tokens": 300,
+  "names_behavior": 0,
+  "send_if_empty": "",
+  "impersonation_prompt": "[Write your next reply from the point of view of {{user}}, using the chat history so far as a guideline for the writing style of {{user}}. Don't write as {{char}} or system. Don't describe actions of {{char}}.]",
+  "new_chat_prompt": "[Start a new Chat]",
+  "new_group_chat_prompt": "[Start a new group chat. Group members: {{group}}]",
+  "new_example_chat_prompt": "[Example Chat]",
+  "continue_nudge_prompt": "[Continue your last message without repeating its original content.]",
+  "bias_preset_selected": "Default (none)",
+  "reverse_proxy": "",
+  "proxy_password": "",
+  "max_context_unlocked": false,
+  "wi_format": "{0}",
+  "scenario_format": "{{scenario}}",
+  "personality_format": "{{personality}}",
+  "group_nudge_prompt": "[Write the next reply only as {{char}}.]",
+  "stream_openai": true,
+  "prompts": [
+   {
+    "name": "Main Prompt",
+    "system_prompt": true,
+    "role": "system",
+    "content": "Write {{char}}'s next reply in a fictional chat between {{char}} and {{user}}.",
+    "identifier": "main"
+   },
+   {
+    "name": "Auxiliary Prompt",
+    "system_prompt": true,
+    "role": "system",
+    "content": "",
+    "identifier": "nsfw"
+   },
+   {
+    "identifier": "dialogueExamples",
+    "name": "Chat Examples",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "name": "Post-History Instructions",
+    "system_prompt": true,
+    "role": "system",
+    "content": "",
+    "identifier": "jailbreak"
+   },
+   {
+    "identifier": "chatHistory",
+    "name": "Chat History",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "worldInfoAfter",
+    "name": "World Info (after)",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "worldInfoBefore",
+    "name": "World Info (before)",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "enhanceDefinitions",
+    "role": "system",
+    "name": "Enhance Definitions",
+    "content": "If you have more knowledge of {{char}}, add to the character's lore and personality to enhance them but keep the Character Sheet's definitions absolute.",
+    "system_prompt": true,
+    "marker": false
+   },
+   {
+    "identifier": "charDescription",
+    "name": "Char Description",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "charPersonality",
+    "name": "Char Personality",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "scenario",
+    "name": "Scenario",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "personaDescription",
+    "name": "Persona Description",
+    "system_prompt": true,
+    "marker": true
+   },
+   {
+    "identifier": "rules",
+    "name": "写作规则",
+    "role": "system",
+    "content": "<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替{{user}}说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "rules2",
+    "name": "补充规则",
+    "role": "system",
+    "content": "- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替{{user}}说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "status",
+    "name": "状态栏",
+    "role": "system",
+    "content": "<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：{{getvar::affection}}</div>\n```\n</status>\n════════════════",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "vars",
+    "name": "变量初始化",
+    "role": "system",
+    "content": "{{setvar::affection::10}}{{setvar::mood::happy}}当前心情：{{getvar::mood}}\n{{// 这是注释，不会发送}}\n{{if .flag}}flag已设置{{/if}}\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "dupe",
+    "name": "重复规则",
+    "role": "system",
+    "content": "- 文风细腻，注重感官描写。",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "inchat0",
+    "name": "深度0-系统",
+    "role": "system",
+    "content": "[D0 系统注入：保持角色]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_position": 1,
+    "injection_depth": 0,
+    "injection_order": 100
+   },
+   {
+    "identifier": "inchat2a",
+    "name": "深度2-用户-低序",
+    "role": "user",
+    "content": "[D2 用户 order50 A]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_position": 1,
+    "injection_depth": 2,
+    "injection_order": 50
+   },
+   {
+    "identifier": "inchat2b",
+    "name": "深度2-用户-低序-同组",
+    "role": "user",
+    "content": "[D2 用户 order50 B]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_position": 1,
+    "injection_depth": 2,
+    "injection_order": 50
+   },
+   {
+    "identifier": "inchat2c",
+    "name": "深度2-助手-高序",
+    "role": "assistant",
+    "content": "[D2 助手 order200]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_position": 1,
+    "injection_depth": 2,
+    "injection_order": 200
+   },
+   {
+    "identifier": "impOnly",
+    "name": "仅扮演触发",
+    "role": "system",
+    "content": "[仅在 impersonate 时发送]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_trigger": [
+     "impersonate"
+    ]
+   },
+   {
+    "identifier": "contOnly",
+    "name": "仅续写触发",
+    "role": "system",
+    "content": "[仅在 continue 时发送]",
+    "system_prompt": false,
+    "marker": false,
+    "injection_trigger": [
+     "continue"
+    ]
+   },
+   {
+    "identifier": "off",
+    "name": "已关闭",
+    "role": "system",
+    "content": "[这条已被关闭]",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "orphan",
+    "name": "孤立条目",
+    "role": "system",
+    "content": "[不在 prompt_order 中]",
+    "system_prompt": false,
+    "marker": false
+   },
+   {
+    "identifier": "emptyMacro",
+    "name": "宏求值为空",
+    "role": "system",
+    "content": "{{trim}}",
+    "system_prompt": false,
+    "marker": false
+   }
+  ],
+  "prompt_order": [
+   {
+    "character_id": 100000,
+    "order": [
+     {
+      "identifier": "main",
+      "enabled": true
+     },
+     {
+      "identifier": "worldInfoBefore",
+      "enabled": true
+     },
+     {
+      "identifier": "charDescription",
+      "enabled": true
+     },
+     {
+      "identifier": "charPersonality",
+      "enabled": true
+     },
+     {
+      "identifier": "scenario",
+      "enabled": true
+     },
+     {
+      "identifier": "enhanceDefinitions",
+      "enabled": false
+     },
+     {
+      "identifier": "nsfw",
+      "enabled": true
+     },
+     {
+      "identifier": "worldInfoAfter",
+      "enabled": true
+     },
+     {
+      "identifier": "dialogueExamples",
+      "enabled": true
+     },
+     {
+      "identifier": "chatHistory",
+      "enabled": true
+     },
+     {
+      "identifier": "jailbreak",
+      "enabled": true
+     }
+    ]
+   },
+   {
+    "character_id": 100001,
+    "order": [
+     {
+      "identifier": "main",
+      "enabled": true
+     },
+     {
+      "identifier": "worldInfoBefore",
+      "enabled": true
+     },
+     {
+      "identifier": "personaDescription",
+      "enabled": true
+     },
+     {
+      "identifier": "charDescription",
+      "enabled": true
+     },
+     {
+      "identifier": "charPersonality",
+      "enabled": true
+     },
+     {
+      "identifier": "scenario",
+      "enabled": true
+     },
+     {
+      "identifier": "enhanceDefinitions",
+      "enabled": false
+     },
+     {
+      "identifier": "nsfw",
+      "enabled": true
+     },
+     {
+      "identifier": "worldInfoAfter",
+      "enabled": true
+     },
+     {
+      "identifier": "dialogueExamples",
+      "enabled": true
+     },
+     {
+      "identifier": "rules",
+      "enabled": true
+     },
+     {
+      "identifier": "rules2",
+      "enabled": true
+     },
+     {
+      "identifier": "status",
+      "enabled": true
+     },
+     {
+      "identifier": "vars",
+      "enabled": true
+     },
+     {
+      "identifier": "dupe",
+      "enabled": true
+     },
+     {
+      "identifier": "impOnly",
+      "enabled": true
+     },
+     {
+      "identifier": "contOnly",
+      "enabled": true
+     },
+     {
+      "identifier": "off",
+      "enabled": false
+     },
+     {
+      "identifier": "emptyMacro",
+      "enabled": true
+     },
+     {
+      "identifier": "chatHistory",
+      "enabled": true
+     },
+     {
+      "identifier": "jailbreak",
+      "enabled": true
+     },
+     {
+      "identifier": "inchat0",
+      "enabled": true
+     },
+     {
+      "identifier": "inchat2a",
+      "enabled": true
+     },
+     {
+      "identifier": "inchat2b",
+      "enabled": true
+     },
+     {
+      "identifier": "inchat2c",
+      "enabled": true
+     }
+    ]
+   }
+  ],
+  "show_external_models": false,
+  "assistant_prefill": "",
+  "assistant_impersonation": "",
+  "use_sysprompt": false,
+  "squash_system_messages": false,
+  "media_inlining": true,
+  "bypass_status_check": false,
+  "continue_prefill": false,
+  "continue_postfix": " ",
+  "seed": -1,
+  "n": 1,
+  "extensions": {
+   "regex_scripts": [
+    {
+     "id": "pd-regex-1",
+     "scriptName": "隐藏状态栏",
+     "findRegex": "/<status>[\\s\\S]*?<\\/status>/g",
+     "replaceString": "",
+     "trimStrings": [],
+     "placement": [
+      2
+     ],
+     "disabled": false,
+     "markdownOnly": true,
+     "promptOnly": false,
+     "runOnEdit": true,
+     "substituteRegex": 0,
+     "minDepth": null,
+     "maxDepth": null
+    },
+    {
+     "id": "pd-regex-2",
+     "scriptName": "提示词替换",
+     "findRegex": "/foo/g",
+     "replaceString": "bar",
+     "trimStrings": [],
+     "placement": [
+      1,
+      2
+     ],
+     "disabled": false,
+     "markdownOnly": false,
+     "promptOnly": true,
+     "runOnEdit": false,
+     "substituteRegex": 0,
+     "minDepth": null,
+     "maxDepth": 2
+    }
+   ],
+   "some_other_extension": {
+    "foo": 1
+   }
+  }
+ },
+ "probes": {
+  "normal": {
+   "type": "normal",
+   "variant": "base",
+   "tagged": [
+    {
+     "role": "system",
+     "content": "⟦PD:p:main⟧Write PD Probe's next reply in a fictional chat between PD Probe and User.",
+     "container": "main",
+     "identifier": "main"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧",
+     "container": "personaDescription",
+     "identifier": "personaDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧",
+     "container": "charDescription",
+     "identifier": "charDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧",
+     "container": "charPersonality",
+     "identifier": "charPersonality"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧",
+     "container": "scenario",
+     "identifier": "scenario"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:nsfw⟧",
+     "container": "nsfw",
+     "identifier": "nsfw"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]",
+     "container": "dialogueExamples",
+     "identifier": "newChat"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-0",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-1",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules⟧<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>",
+     "container": "rules",
+     "identifier": "rules"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules2⟧- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。",
+     "container": "rules2",
+     "identifier": "rules2"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:status⟧<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════",
+     "container": "status",
+     "identifier": "status"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:vars⟧当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>",
+     "container": "vars",
+     "identifier": "vars"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:dupe⟧- 文风细腻，注重感官描写。",
+     "container": "dupe",
+     "identifier": "dupe"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:emptyMacro⟧",
+     "container": "emptyMacro",
+     "identifier": "emptyMacro"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]",
+     "container": "chatHistory",
+     "identifier": "newMainChat"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-1"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-2"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-3"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-4"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:p:inchat2a⟧[D2 用户 order50 A]\n⟦PD:p:inchat2b⟧[D2 用户 order50 B]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-5"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:p:inchat2c⟧[D2 助手 order200]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-6"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-7"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-8"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:inchat0⟧[D0 系统注入：保持角色]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-9"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:jailbreak⟧",
+     "container": "jailbreak",
+     "identifier": "jailbreak"
+    }
+   ],
+   "plain": [
+    {
+     "role": "system",
+     "content": "Write PD Probe's next reply in a fictional chat between PD Probe and User."
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>"
+    },
+    {
+     "role": "system",
+     "content": "- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════"
+    },
+    {
+     "role": "system",
+     "content": "当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>"
+    },
+    {
+     "role": "system",
+     "content": "- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧"
+    },
+    {
+     "role": "user",
+     "content": "[D2 用户 order50 A]\n[D2 用户 order50 B]"
+    },
+    {
+     "role": "assistant",
+     "content": "[D2 助手 order200]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧"
+    },
+    {
+     "role": "system",
+     "content": "[D0 系统注入：保持角色]"
+    }
+   ],
+   "squashed": null
+  },
+  "continue": {
+   "type": "continue",
+   "variant": "base",
+   "tagged": [
+    {
+     "role": "system",
+     "content": "⟦PD:p:main⟧Write PD Probe's next reply in a fictional chat between PD Probe and User.",
+     "container": "main",
+     "identifier": "main"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧",
+     "container": "personaDescription",
+     "identifier": "personaDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧",
+     "container": "charDescription",
+     "identifier": "charDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧",
+     "container": "charPersonality",
+     "identifier": "charPersonality"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧",
+     "container": "scenario",
+     "identifier": "scenario"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:nsfw⟧",
+     "container": "nsfw",
+     "identifier": "nsfw"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]",
+     "container": "dialogueExamples",
+     "identifier": "newChat"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-0",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-1",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules⟧<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>",
+     "container": "rules",
+     "identifier": "rules"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules2⟧- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。",
+     "container": "rules2",
+     "identifier": "rules2"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:status⟧<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════",
+     "container": "status",
+     "identifier": "status"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:vars⟧当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>",
+     "container": "vars",
+     "identifier": "vars"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:dupe⟧- 文风细腻，注重感官描写。",
+     "container": "dupe",
+     "identifier": "dupe"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:contOnly⟧[仅在 continue 时发送]",
+     "container": "contOnly",
+     "identifier": "contOnly"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:emptyMacro⟧",
+     "container": "emptyMacro",
+     "identifier": "emptyMacro"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]",
+     "container": "chatHistory",
+     "identifier": "newMainChat"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-1"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-2"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-3"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-4"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:p:inchat2a⟧[D2 用户 order50 A]\n⟦PD:p:inchat2b⟧[D2 用户 order50 B]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-5"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:p:inchat2c⟧[D2 助手 order200]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-6"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-7"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:inchat0⟧[D0 系统注入：保持角色]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-8"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:jailbreak⟧",
+     "container": "jailbreak",
+     "identifier": "jailbreak"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧",
+     "container": "continueNudge"
+    },
+    {
+     "role": "system",
+     "content": "[Continue your last message without repeating its original content.]",
+     "container": "continueNudge",
+     "identifier": "continueNudge"
+    }
+   ],
+   "plain": [
+    {
+     "role": "system",
+     "content": "Write PD Probe's next reply in a fictional chat between PD Probe and User."
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>"
+    },
+    {
+     "role": "system",
+     "content": "- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════"
+    },
+    {
+     "role": "system",
+     "content": "当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>"
+    },
+    {
+     "role": "system",
+     "content": "- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "[仅在 continue 时发送]"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧"
+    },
+    {
+     "role": "user",
+     "content": "[D2 用户 order50 A]\n[D2 用户 order50 B]"
+    },
+    {
+     "role": "assistant",
+     "content": "[D2 助手 order200]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧"
+    },
+    {
+     "role": "system",
+     "content": "[D0 系统注入：保持角色]"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧"
+    },
+    {
+     "role": "system",
+     "content": "[Continue your last message without repeating its original content.]"
+    }
+   ],
+   "squashed": null
+  },
+  "impersonate": {
+   "type": "impersonate",
+   "variant": "base",
+   "tagged": [
+    {
+     "role": "system",
+     "content": "⟦PD:p:main⟧Write PD Probe's next reply in a fictional chat between PD Probe and User.",
+     "container": "main",
+     "identifier": "main"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧",
+     "container": "personaDescription",
+     "identifier": "personaDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧",
+     "container": "charDescription",
+     "identifier": "charDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧",
+     "container": "charPersonality",
+     "identifier": "charPersonality"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧",
+     "container": "scenario",
+     "identifier": "scenario"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:nsfw⟧",
+     "container": "nsfw",
+     "identifier": "nsfw"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]",
+     "container": "dialogueExamples",
+     "identifier": "newChat"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-0",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-1",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules⟧<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>",
+     "container": "rules",
+     "identifier": "rules"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules2⟧- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。",
+     "container": "rules2",
+     "identifier": "rules2"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:status⟧<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════",
+     "container": "status",
+     "identifier": "status"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:vars⟧当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>",
+     "container": "vars",
+     "identifier": "vars"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:dupe⟧- 文风细腻，注重感官描写。",
+     "container": "dupe",
+     "identifier": "dupe"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:impOnly⟧[仅在 impersonate 时发送]",
+     "container": "impOnly",
+     "identifier": "impOnly"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:emptyMacro⟧",
+     "container": "emptyMacro",
+     "identifier": "emptyMacro"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]",
+     "container": "chatHistory",
+     "identifier": "newMainChat"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-1"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-2"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-3"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-4"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:p:inchat2a⟧[D2 用户 order50 A]\n⟦PD:p:inchat2b⟧[D2 用户 order50 B]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-5"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:p:inchat2c⟧[D2 助手 order200]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-6"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-7"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-8"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:inchat0⟧[D0 系统注入：保持角色]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-9"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:jailbreak⟧",
+     "container": "jailbreak",
+     "identifier": "jailbreak"
+    },
+    {
+     "role": "system",
+     "content": "[Write your next reply from the point of view of User, using the chat history so far as a guideline for the writing style of User. Don't write as PD Probe or system. Don't describe actions of PD Probe.]",
+     "container": "controlPrompts",
+     "identifier": "impersonate"
+    }
+   ],
+   "plain": [
+    {
+     "role": "system",
+     "content": "Write PD Probe's next reply in a fictional chat between PD Probe and User."
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>"
+    },
+    {
+     "role": "system",
+     "content": "- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════"
+    },
+    {
+     "role": "system",
+     "content": "当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>"
+    },
+    {
+     "role": "system",
+     "content": "- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "[仅在 impersonate 时发送]"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧"
+    },
+    {
+     "role": "user",
+     "content": "[D2 用户 order50 A]\n[D2 用户 order50 B]"
+    },
+    {
+     "role": "assistant",
+     "content": "[D2 助手 order200]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧"
+    },
+    {
+     "role": "system",
+     "content": "[D0 系统注入：保持角色]"
+    },
+    {
+     "role": "system",
+     "content": "[Write your next reply from the point of view of User, using the chat history so far as a guideline for the writing style of User. Don't write as PD Probe or system. Don't describe actions of PD Probe.]"
+    }
+   ],
+   "squashed": null
+  },
+  "swipe": {
+   "type": "swipe",
+   "variant": "base",
+   "tagged": [
+    {
+     "role": "system",
+     "content": "⟦PD:p:main⟧Write PD Probe's next reply in a fictional chat between PD Probe and User.",
+     "container": "main",
+     "identifier": "main"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧",
+     "container": "personaDescription",
+     "identifier": "personaDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧",
+     "container": "charDescription",
+     "identifier": "charDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧",
+     "container": "charPersonality",
+     "identifier": "charPersonality"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧",
+     "container": "scenario",
+     "identifier": "scenario"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:nsfw⟧",
+     "container": "nsfw",
+     "identifier": "nsfw"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]",
+     "container": "dialogueExamples",
+     "identifier": "newChat"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-0",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-1",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules⟧<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>",
+     "container": "rules",
+     "identifier": "rules"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules2⟧- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。",
+     "container": "rules2",
+     "identifier": "rules2"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:status⟧<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════",
+     "container": "status",
+     "identifier": "status"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:vars⟧当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>",
+     "container": "vars",
+     "identifier": "vars"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:dupe⟧- 文风细腻，注重感官描写。",
+     "container": "dupe",
+     "identifier": "dupe"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:emptyMacro⟧",
+     "container": "emptyMacro",
+     "identifier": "emptyMacro"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]",
+     "container": "chatHistory",
+     "identifier": "newMainChat"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-1"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-2"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-3"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:p:inchat2a⟧[D2 用户 order50 A]\n⟦PD:p:inchat2b⟧[D2 用户 order50 B]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-4"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:p:inchat2c⟧[D2 助手 order200]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-5"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-6"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-7"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:inchat0⟧[D0 系统注入：保持角色]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-8"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:jailbreak⟧",
+     "container": "jailbreak",
+     "identifier": "jailbreak"
+    }
+   ],
+   "plain": [
+    {
+     "role": "system",
+     "content": "Write PD Probe's next reply in a fictional chat between PD Probe and User."
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>"
+    },
+    {
+     "role": "system",
+     "content": "- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════"
+    },
+    {
+     "role": "system",
+     "content": "当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>"
+    },
+    {
+     "role": "system",
+     "content": "- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧"
+    },
+    {
+     "role": "user",
+     "content": "[D2 用户 order50 A]\n[D2 用户 order50 B]"
+    },
+    {
+     "role": "assistant",
+     "content": "[D2 助手 order200]"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧"
+    },
+    {
+     "role": "system",
+     "content": "[D0 系统注入：保持角色]"
+    }
+   ],
+   "squashed": null
+  },
+  "regenerate": {
+   "type": "regenerate",
+   "variant": "base",
+   "tagged": [
+    {
+     "role": "system",
+     "content": "⟦PD:p:main⟧Write PD Probe's next reply in a fictional chat between PD Probe and User.",
+     "container": "main",
+     "identifier": "main"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧",
+     "container": "personaDescription",
+     "identifier": "personaDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧",
+     "container": "charDescription",
+     "identifier": "charDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧",
+     "container": "charPersonality",
+     "identifier": "charPersonality"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧",
+     "container": "scenario",
+     "identifier": "scenario"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:nsfw⟧",
+     "container": "nsfw",
+     "identifier": "nsfw"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]",
+     "container": "dialogueExamples",
+     "identifier": "newChat"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-0",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-1",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules⟧<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>",
+     "container": "rules",
+     "identifier": "rules"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules2⟧- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。",
+     "container": "rules2",
+     "identifier": "rules2"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:status⟧<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════",
+     "container": "status",
+     "identifier": "status"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:vars⟧当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>",
+     "container": "vars",
+     "identifier": "vars"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:dupe⟧- 文风细腻，注重感官描写。",
+     "container": "dupe",
+     "identifier": "dupe"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:emptyMacro⟧",
+     "container": "emptyMacro",
+     "identifier": "emptyMacro"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]",
+     "container": "chatHistory",
+     "identifier": "newMainChat"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-1"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-2"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-3"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-4"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:p:inchat2a⟧[D2 用户 order50 A]\n⟦PD:p:inchat2b⟧[D2 用户 order50 B]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-5"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:p:inchat2c⟧[D2 助手 order200]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-6"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-7"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-8"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:inchat0⟧[D0 系统注入：保持角色]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-9"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:jailbreak⟧",
+     "container": "jailbreak",
+     "identifier": "jailbreak"
+    }
+   ],
+   "plain": [
+    {
+     "role": "system",
+     "content": "Write PD Probe's next reply in a fictional chat between PD Probe and User."
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>"
+    },
+    {
+     "role": "system",
+     "content": "- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════"
+    },
+    {
+     "role": "system",
+     "content": "当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>"
+    },
+    {
+     "role": "system",
+     "content": "- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧"
+    },
+    {
+     "role": "user",
+     "content": "[D2 用户 order50 A]\n[D2 用户 order50 B]"
+    },
+    {
+     "role": "assistant",
+     "content": "[D2 助手 order200]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧"
+    },
+    {
+     "role": "system",
+     "content": "[D0 系统注入：保持角色]"
+    }
+   ],
+   "squashed": null
+  },
+  "quiet": {
+   "type": "quiet",
+   "variant": "base",
+   "tagged": [
+    {
+     "role": "system",
+     "content": "⟦PD:p:main⟧Write PD Probe's next reply in a fictional chat between PD Probe and User.",
+     "container": "main",
+     "identifier": "main"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧",
+     "container": "personaDescription",
+     "identifier": "personaDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧",
+     "container": "charDescription",
+     "identifier": "charDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧",
+     "container": "charPersonality",
+     "identifier": "charPersonality"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧",
+     "container": "scenario",
+     "identifier": "scenario"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:nsfw⟧",
+     "container": "nsfw",
+     "identifier": "nsfw"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]",
+     "container": "dialogueExamples",
+     "identifier": "newChat"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-0",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-1",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules⟧<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>",
+     "container": "rules",
+     "identifier": "rules"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules2⟧- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。",
+     "container": "rules2",
+     "identifier": "rules2"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:status⟧<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════",
+     "container": "status",
+     "identifier": "status"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:vars⟧当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>",
+     "container": "vars",
+     "identifier": "vars"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:dupe⟧- 文风细腻，注重感官描写。",
+     "container": "dupe",
+     "identifier": "dupe"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:emptyMacro⟧",
+     "container": "emptyMacro",
+     "identifier": "emptyMacro"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]",
+     "container": "chatHistory",
+     "identifier": "newMainChat"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-1"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-2"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-3"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-4"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:p:inchat2a⟧[D2 用户 order50 A]\n⟦PD:p:inchat2b⟧[D2 用户 order50 B]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-5"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:p:inchat2c⟧[D2 助手 order200]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-6"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-7"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-8"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:inchat0⟧[D0 系统注入：保持角色]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-9"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:jailbreak⟧",
+     "container": "jailbreak",
+     "identifier": "jailbreak"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:q:quiet⟧",
+     "container": "controlPrompts",
+     "identifier": "quietPrompt"
+    }
+   ],
+   "plain": [
+    {
+     "role": "system",
+     "content": "Write PD Probe's next reply in a fictional chat between PD Probe and User."
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>"
+    },
+    {
+     "role": "system",
+     "content": "- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════"
+    },
+    {
+     "role": "system",
+     "content": "当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>"
+    },
+    {
+     "role": "system",
+     "content": "- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧"
+    },
+    {
+     "role": "user",
+     "content": "[D2 用户 order50 A]\n[D2 用户 order50 B]"
+    },
+    {
+     "role": "assistant",
+     "content": "[D2 助手 order200]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧"
+    },
+    {
+     "role": "system",
+     "content": "[D0 系统注入：保持角色]"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:q:quiet⟧"
+    }
+   ],
+   "squashed": null
+  },
+  "normal+card-override": {
+   "type": "normal",
+   "variant": "card-override",
+   "tagged": [
+    {
+     "role": "system",
+     "content": "⟦PD:p:main⟧⟦PD:o:main⟧⟦PD:p:main⟧Write PD Probe Override's next reply in a fictional chat between PD Probe Override and User.",
+     "container": "main",
+     "identifier": "main"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧",
+     "container": "personaDescription",
+     "identifier": "personaDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧",
+     "container": "charDescription",
+     "identifier": "charDescription"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧",
+     "container": "charPersonality",
+     "identifier": "charPersonality"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧",
+     "container": "scenario",
+     "identifier": "scenario"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:nsfw⟧",
+     "container": "nsfw",
+     "identifier": "nsfw"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]",
+     "container": "dialogueExamples",
+     "identifier": "newChat"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-0",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "container": "dialogueExamples",
+     "identifier": "dialogueExamples 0-1",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules⟧<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>",
+     "container": "rules",
+     "identifier": "rules"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:rules2⟧- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。",
+     "container": "rules2",
+     "identifier": "rules2"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:status⟧<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════",
+     "container": "status",
+     "identifier": "status"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:vars⟧当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>",
+     "container": "vars",
+     "identifier": "vars"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:dupe⟧- 文风细腻，注重感官描写。",
+     "container": "dupe",
+     "identifier": "dupe"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:emptyMacro⟧",
+     "container": "emptyMacro",
+     "identifier": "emptyMacro"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]",
+     "container": "chatHistory",
+     "identifier": "newMainChat"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-1"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-2"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-3"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-4"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:p:inchat2a⟧[D2 用户 order50 A]\n⟦PD:p:inchat2b⟧[D2 用户 order50 B]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-5"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:p:inchat2c⟧[D2 助手 order200]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-6"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-7"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧",
+     "container": "chatHistory",
+     "identifier": "chatHistory-8"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:inchat0⟧[D0 系统注入：保持角色]",
+     "container": "chatHistory",
+     "identifier": "chatHistory-9"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:p:jailbreak⟧⟦PD:o:jailbreak⟧⟦PD:p:jailbreak⟧",
+     "container": "jailbreak",
+     "identifier": "jailbreak"
+    }
+   ],
+   "plain": [
+    {
+     "role": "system",
+     "content": "⟦PD:o:main⟧Write PD Probe Override's next reply in a fictional chat between PD Probe Override and User."
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:persona⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:description⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:personality⟧"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:c:scenario⟧"
+    },
+    {
+     "role": "system",
+     "content": "[Example Chat]"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:user⟧",
+     "name": "example_user"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:x:char⟧",
+     "name": "example_assistant"
+    },
+    {
+     "role": "system",
+     "content": "<rules>\n# 写作规则\n- 必须使用第三人称叙述。\n- 每次回复不少于300字。\n- 禁止替User说话或行动。\n- 必须使用简体中文回复。\n</rules>\n<style>\n- 文风细腻，注重感官描写。\n</style>"
+    },
+    {
+     "role": "system",
+     "content": "- 使用第一人称叙述。\n- 每次回复不超过100字。\n- 可以替User说话。\n- 请用英文回复。\n- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "<status>\n在每次回复末尾输出状态栏：\n```html\n<div class=\"status\">❤ 好感度：</div>\n```\n</status>\n════════════════"
+    },
+    {
+     "role": "system",
+     "content": "当前心情：happy\n\n\n{{notARealMacro}}\n<% if (x) { %>EJS 片段<% } %>"
+    },
+    {
+     "role": "system",
+     "content": "- 文风细腻，注重感官描写。"
+    },
+    {
+     "role": "system",
+     "content": "[Start a new Chat]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:0⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:1⟧"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:2⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:3⟧"
+    },
+    {
+     "role": "user",
+     "content": "[D2 用户 order50 A]\n[D2 用户 order50 B]"
+    },
+    {
+     "role": "assistant",
+     "content": "[D2 助手 order200]"
+    },
+    {
+     "role": "user",
+     "content": "⟦PD:h:4⟧"
+    },
+    {
+     "role": "assistant",
+     "content": "⟦PD:h:5⟧"
+    },
+    {
+     "role": "system",
+     "content": "[D0 系统注入：保持角色]"
+    },
+    {
+     "role": "system",
+     "content": "⟦PD:o:jailbreak⟧"
+    }
+   ],
+   "squashed": null
+  }
+ },
+ "macroCatalog": {
+  "space": {
+   "name": "space",
+   "category": "utility",
+   "description": "Returns one or more spaces. One space by default, more if the count argument is specified."
+  },
+  "newline": {
+   "name": "newline",
+   "category": "utility",
+   "description": "Inserts one or more newlines. One newline by default, more if the count argument is specified."
+  },
+  "noop": {
+   "name": "noop",
+   "category": "utility",
+   "description": "Does nothing and produces an empty string."
+  },
+  "trim": {
+   "name": "trim",
+   "category": "utility",
+   "description": "Trims whitespace. Non-scoped: trims newlines around the macro (post-processing). Scoped: returns the content (auto-trimmed by the engine)."
+  },
+  "if": {
+   "name": "if",
+   "category": "utility",
+   "description": "Conditional macro. Returns the content if the condition is truthy, otherwise returns nothing (or the else branch if present). Prefix the condition with ! to invert. If the condition is a registered macro name (without braces), it will be resolved first. Variable shorthands (.varname for local, $varname for global) are also supported."
+  },
+  "else": {
+   "name": "else",
+   "category": "utility",
+   "description": "Marks the else branch inside a scoped {{if}} block. Only works inside {{if}}...{{/if}}. If used outside, returns an invisible marker."
+  },
+  "input": {
+   "name": "input",
+   "category": "utility",
+   "description": "Current text from the send textarea."
+  },
+  "maxprompt": {
+   "name": "maxPrompt",
+   "category": "state",
+   "description": "Maximum prompt context size."
+  },
+  "maxprompttokens": {
+   "name": "maxPromptTokens",
+   "category": "state",
+   "description": "Maximum prompt context size."
+  },
+  "maxcontext": {
+   "name": "maxContext",
+   "category": "state",
+   "description": "Maximum context token limit."
+  },
+  "maxcontexttokens": {
+   "name": "maxContextTokens",
+   "category": "state",
+   "description": "Maximum context token limit."
+  },
+  "maxresponse": {
+   "name": "maxResponse",
+   "category": "state",
+   "description": "Maximum response token limit."
+  },
+  "maxresponsetokens": {
+   "name": "maxResponseTokens",
+   "category": "state",
+   "description": "Maximum response token limit."
+  },
+  "reverse": {
+   "name": "reverse",
+   "category": "utility",
+   "description": "Reverses the characters of the argument provided."
+  },
+  "//": {
+   "name": "//",
+   "category": "utility",
+   "description": "Comment macro that produces an empty string. Can be used for writing into prompt definitions, without being passed to the context."
+  },
+  "comment": {
+   "name": "comment",
+   "category": "utility",
+   "description": "Comment macro that produces an empty string. Can be used for writing into prompt definitions, without being passed to the context."
+  },
+  "roll": {
+   "name": "roll",
+   "category": "random",
+   "description": "Rolls dice using droll syntax (e.g. {{roll 1d20}})."
+  },
+  "random": {
+   "name": "random",
+   "category": "random",
+   "description": "Picks a random item from a list. Will be re-rolled every time macros are resolved."
+  },
+  "pick": {
+   "name": "pick",
+   "category": "random",
+   "description": "Picks a random item from a list, but keeps the choice stable for a given chat and macro position. Can be rerolled via /reroll-pick slash command."
+  },
+  "banned": {
+   "name": "banned",
+   "category": "utility",
+   "description": "Bans a word for Text Completion backend. (Strips quotes surrounding the banned word, if present)"
+  },
+  "outlet": {
+   "name": "outlet",
+   "category": "utility",
+   "description": "Returns the world info outlet prompt for a given outlet key."
+  },
+  "user": {
+   "name": "user",
+   "category": "names",
+   "description": "Your current Persona username."
+  },
+  "char": {
+   "name": "char",
+   "category": "names",
+   "description": "The character's name."
+  },
+  "group": {
+   "name": "group",
+   "category": "names",
+   "description": "Comma-separated list of group member names (including muted) or the character name in solo chats."
+  },
+  "charifnotgroup": {
+   "name": "charIfNotGroup",
+   "category": "names",
+   "description": "Comma-separated list of group member names (including muted) or the character name in solo chats."
+  },
+  "groupnotmuted": {
+   "name": "groupNotMuted",
+   "category": "names",
+   "description": "Comma-separated list of group member names excluding muted members."
+  },
+  "notchar": {
+   "name": "notChar",
+   "category": "names",
+   "description": "Comma-separated list of all participants except the current speaker."
+  },
+  "charprompt": {
+   "name": "charPrompt",
+   "category": "character",
+   "description": "The character's Main Prompt override."
+  },
+  "charinstruction": {
+   "name": "charInstruction",
+   "category": "character",
+   "description": "The character's Post-History Instructions override."
+  },
+  "chardescription": {
+   "name": "charDescription",
+   "category": "character",
+   "description": "The character's description."
+  },
+  "description": {
+   "name": "description",
+   "category": "character",
+   "description": "The character's description."
+  },
+  "charpersonality": {
+   "name": "charPersonality",
+   "category": "character",
+   "description": "The character's personality."
+  },
+  "personality": {
+   "name": "personality",
+   "category": "character",
+   "description": "The character's personality."
+  },
+  "charscenario": {
+   "name": "charScenario",
+   "category": "character",
+   "description": "The character's scenario."
+  },
+  "scenario": {
+   "name": "scenario",
+   "category": "character",
+   "description": "The character's scenario."
+  },
+  "persona": {
+   "name": "persona",
+   "category": "character",
+   "description": "Your current Persona description."
+  },
+  "mesexamplesraw": {
+   "name": "mesExamplesRaw",
+   "category": "character",
+   "description": "Unformatted dialogue examples from the character card."
+  },
+  "mesexamples": {
+   "name": "mesExamples",
+   "category": "character",
+   "description": "The character's dialogue examples, formatted for instruct mode when enabled."
+  },
+  "chardepthprompt": {
+   "name": "charDepthPrompt",
+   "category": "character",
+   "description": "The character's @ Depth Note."
+  },
+  "charcreatornotes": {
+   "name": "charCreatorNotes",
+   "category": "character",
+   "description": "Creator notes from the character card."
+  },
+  "creatornotes": {
+   "name": "creatorNotes",
+   "category": "character",
+   "description": "Creator notes from the character card."
+  },
+  "charfirstmessage": {
+   "name": "charFirstMessage",
+   "category": "character",
+   "description": "The character's first message / greeting. Optionally specify an index to access alternate greetings."
+  },
+  "greeting": {
+   "name": "greeting",
+   "category": "character",
+   "description": "The character's first message / greeting. Optionally specify an index to access alternate greetings."
+  },
+  "charversion": {
+   "name": "charVersion",
+   "category": "character",
+   "description": "The character's version number."
+  },
+  "version": {
+   "name": "char_version",
+   "category": "character",
+   "description": "The character's version number."
+  },
+  "char_version": {
+   "name": "char_version",
+   "category": "character",
+   "description": "The character's version number."
+  },
+  "model": {
+   "name": "model",
+   "category": "state",
+   "description": "Model name for the currently selected API (Chat Completion or Chat Completion)."
+  },
+  "original": {
+   "name": "original",
+   "category": "character",
+   "description": "Original message content for {{original}} substitution in in character prompt overrides."
+  },
+  "ismobile": {
+   "name": "isMobile",
+   "category": "state",
+   "description": "\"true\" if currently running in a mobile environment, \"false\" otherwise."
+  },
+  "lastgenerationtype": {
+   "name": "lastGenerationType",
+   "category": "state",
+   "description": "Type of the last queued generation request (e.g. \"normal\", \"impersonate\", \"regenerate\", \"quiet\", \"swipe\", \"continue\"). Empty if none yet or chat was switched."
+  },
+  "hasextension": {
+   "name": "hasExtension",
+   "category": "state",
+   "description": "Checks if a specific extension is enabled. If the extension does not exist, returns false."
+  },
+  "lastmessage": {
+   "name": "lastMessage",
+   "category": "chat",
+   "description": "Last message in the chat."
+  },
+  "lastmessageid": {
+   "name": "lastMessageId",
+   "category": "chat",
+   "description": "Index of the last message in the chat."
+  },
+  "lastusermessage": {
+   "name": "lastUserMessage",
+   "category": "chat",
+   "description": "Last user message in the chat."
+  },
+  "lastcharmessage": {
+   "name": "lastCharMessage",
+   "category": "chat",
+   "description": "Last character/bot message in the chat."
+  },
+  "firstincludedmessageid": {
+   "name": "firstIncludedMessageId",
+   "category": "chat",
+   "description": "Index of the first message included in the current context."
+  },
+  "firstdisplayedmessageid": {
+   "name": "firstDisplayedMessageId",
+   "category": "chat",
+   "description": "Index of the first displayed message in the chat."
+  },
+  "lastswipeid": {
+   "name": "lastSwipeId",
+   "category": "chat",
+   "description": "1-based index of the last swipe for the last message."
+  },
+  "currentswipeid": {
+   "name": "currentSwipeId",
+   "category": "chat",
+   "description": "1-based index of the current swipe."
+  },
+  "allchatrange": {
+   "name": "allChatRange",
+   "category": "chat",
+   "description": "Range of all message IDs in the chat (e.g. \"0-10\"). Empty string if the chat is empty."
+  },
+  "time": {
+   "name": "time",
+   "category": "time",
+   "description": "Current local time, or UTC offset when called as {{time::UTC±(offset)}}"
+  },
+  "date": {
+   "name": "date",
+   "category": "time",
+   "description": "Current local date as a string in the local short format."
+  },
+  "weekday": {
+   "name": "weekday",
+   "category": "time",
+   "description": "Current weekday name."
+  },
+  "isotime": {
+   "name": "isotime",
+   "category": "time",
+   "description": "Current time in HH:mm format."
+  },
+  "isodate": {
+   "name": "isodate",
+   "category": "time",
+   "description": "Current date in YYYY-MM-DD format."
+  },
+  "datetimeformat": {
+   "name": "datetimeformat",
+   "category": "time",
+   "description": "Formats the current date/time using the given moment.js format string."
+  },
+  "idleduration": {
+   "name": "idleDuration",
+   "category": "time",
+   "description": "Human-readable duration since the last user message."
+  },
+  "idle_duration": {
+   "name": "idle_duration",
+   "category": "time",
+   "description": "Human-readable duration since the last user message."
+  },
+  "timediff": {
+   "name": "timeDiff",
+   "category": "time",
+   "description": "Human-readable difference between two times. Order of times does not matter, it will return the absolute difference."
+  },
+  "setvar": {
+   "name": "setvar",
+   "category": "variable",
+   "description": "Sets a local variable to the given value."
+  },
+  "addvar": {
+   "name": "addvar",
+   "category": "variable",
+   "description": "Adds a value to an existing local variable (numeric or string append). If the variable does not exist, it will be created."
+  },
+  "incvar": {
+   "name": "incvar",
+   "category": "variable",
+   "description": "Increments a local variable by 1 and returns the new value. If the variable does not exist, it will be created."
+  },
+  "decvar": {
+   "name": "decvar",
+   "category": "variable",
+   "description": "Decrements a local variable by 1 and returns the new value. If the variable does not exist, it will be created."
+  },
+  "getvar": {
+   "name": "getvar",
+   "category": "variable",
+   "description": "Gets the value of a local variable."
+  },
+  "hasvar": {
+   "name": "hasvar",
+   "category": "variable",
+   "description": "Checks if a local variable exists."
+  },
+  "varexists": {
+   "name": "varexists",
+   "category": "variable",
+   "description": "Checks if a local variable exists."
+  },
+  "deletevar": {
+   "name": "deletevar",
+   "category": "variable",
+   "description": "Deletes a local variable."
+  },
+  "flushvar": {
+   "name": "flushvar",
+   "category": "variable",
+   "description": "Deletes a local variable."
+  },
+  "setvarkey": {
+   "name": "setvarkey",
+   "category": "variable",
+   "description": "Sets a value at a specific key or index in a local object or array. If the variable does not exist, it will be created based on the type of the key."
+  },
+  "setvarindex": {
+   "name": "setvarindex",
+   "category": "variable",
+   "description": "Sets a value at a specific key or index in a local object or array. If the variable does not exist, it will be created based on the type of the key."
+  },
+  "getvarkey": {
+   "name": "getvarkey",
+   "category": "variable",
+   "description": "Gets a value at a specific key or index in a local object or array variable."
+  },
+  "getvarindex": {
+   "name": "getvarindex",
+   "category": "variable",
+   "description": "Gets a value at a specific key or index in a local object or array variable."
+  },
+  "setglobalvar": {
+   "name": "setglobalvar",
+   "category": "variable",
+   "description": "Sets a global variable to the given value."
+  },
+  "addglobalvar": {
+   "name": "addglobalvar",
+   "category": "variable",
+   "description": "Adds a value to an existing global variable (numeric or string append). If the variable does not exist, it will be created."
+  },
+  "incglobalvar": {
+   "name": "incglobalvar",
+   "category": "variable",
+   "description": "Increments a global variable by 1 and returns the new value. If the variable does not exist, it will be created."
+  },
+  "decglobalvar": {
+   "name": "decglobalvar",
+   "category": "variable",
+   "description": "Decrements a global variable by 1 and returns the new value. If the variable does not exist, it will be created."
+  },
+  "getglobalvar": {
+   "name": "getglobalvar",
+   "category": "variable",
+   "description": "Gets the value of a global variable."
+  },
+  "hasglobalvar": {
+   "name": "hasglobalvar",
+   "category": "variable",
+   "description": "Checks if a global variable exists."
+  },
+  "globalvarexists": {
+   "name": "globalvarexists",
+   "category": "variable",
+   "description": "Checks if a global variable exists."
+  },
+  "deleteglobalvar": {
+   "name": "deleteglobalvar",
+   "category": "variable",
+   "description": "Deletes a global variable."
+  },
+  "flushglobalvar": {
+   "name": "flushglobalvar",
+   "category": "variable",
+   "description": "Deletes a global variable."
+  },
+  "setglobalvarkey": {
+   "name": "setglobalvarkey",
+   "category": "variable",
+   "description": "Sets a value at a specific key or index in a global object or array variable. If the variable does not exist, it will be created based on the type of the key."
+  },
+  "setglobalvarindex": {
+   "name": "setglobalvarindex",
+   "category": "variable",
+   "description": "Sets a value at a specific key or index in a global object or array variable. If the variable does not exist, it will be created based on the type of the key."
+  },
+  "getglobalvarkey": {
+   "name": "getglobalvarkey",
+   "category": "variable",
+   "description": "Gets a value at a specific key or index in a global object or array variable."
+  },
+  "getglobalvarindex": {
+   "name": "getglobalvarindex",
+   "category": "variable",
+   "description": "Gets a value at a specific key or index in a global object or array variable."
+  },
+  "instructstorystringprefix": {
+   "name": "instructStoryStringPrefix",
+   "category": "prompts",
+   "description": "Instruct story string prefix."
+  },
+  "instructstorystringsuffix": {
+   "name": "instructStoryStringSuffix",
+   "category": "prompts",
+   "description": "Instruct story string suffix."
+  },
+  "instructuserprefix": {
+   "name": "instructUserPrefix",
+   "category": "prompts",
+   "description": "Instruct input / user prefix sequence."
+  },
+  "instructinput": {
+   "name": "instructInput",
+   "category": "prompts",
+   "description": "Instruct input / user prefix sequence."
+  },
+  "instructusersuffix": {
+   "name": "instructUserSuffix",
+   "category": "prompts",
+   "description": "Instruct input / user suffix sequence."
+  },
+  "instructassistantprefix": {
+   "name": "instructAssistantPrefix",
+   "category": "prompts",
+   "description": "Instruct output / assistant prefix sequence."
+  },
+  "instructoutput": {
+   "name": "instructOutput",
+   "category": "prompts",
+   "description": "Instruct output / assistant prefix sequence."
+  },
+  "instructassistantsuffix": {
+   "name": "instructAssistantSuffix",
+   "category": "prompts",
+   "description": "Instruct output / assistant suffix sequence."
+  },
+  "instructseparator": {
+   "name": "instructSeparator",
+   "category": "prompts",
+   "description": "Instruct output / assistant suffix sequence."
+  },
+  "instructsystemprefix": {
+   "name": "instructSystemPrefix",
+   "category": "prompts",
+   "description": "Instruct system prefix sequence."
+  },
+  "instructsystemsuffix": {
+   "name": "instructSystemSuffix",
+   "category": "prompts",
+   "description": "Instruct system suffix sequence."
+  },
+  "instructfirstassistantprefix": {
+   "name": "instructFirstAssistantPrefix",
+   "category": "prompts",
+   "description": "Instruct first assistant / output prefix sequence"
+  },
+  "instructfirstoutputprefix": {
+   "name": "instructFirstOutputPrefix",
+   "category": "prompts",
+   "description": "Instruct first assistant / output prefix sequence"
+  },
+  "instructlastassistantprefix": {
+   "name": "instructLastAssistantPrefix",
+   "category": "prompts",
+   "description": "Instruct last assistant / output prefix sequence."
+  },
+  "instructlastoutputprefix": {
+   "name": "instructLastOutputPrefix",
+   "category": "prompts",
+   "description": "Instruct last assistant / output prefix sequence."
+  },
+  "instructstop": {
+   "name": "instructStop",
+   "category": "prompts",
+   "description": "Instruct stop sequence."
+  },
+  "instructuserfiller": {
+   "name": "instructUserFiller",
+   "category": "prompts",
+   "description": "Instruct user alignment filler."
+  },
+  "instructsysteminstructionprefix": {
+   "name": "instructSystemInstructionPrefix",
+   "category": "prompts",
+   "description": "Instruct system instruction prefix sequence."
+  },
+  "instructfirstuserprefix": {
+   "name": "instructFirstUserPrefix",
+   "category": "prompts",
+   "description": "Instruct first user / input prefix sequence."
+  },
+  "instructfirstinput": {
+   "name": "instructFirstInput",
+   "category": "prompts",
+   "description": "Instruct first user / input prefix sequence."
+  },
+  "instructlastuserprefix": {
+   "name": "instructLastUserPrefix",
+   "category": "prompts",
+   "description": "Instruct last user / input prefix sequence."
+  },
+  "instructlastinput": {
+   "name": "instructLastInput",
+   "category": "prompts",
+   "description": "Instruct last user / input prefix sequence."
+  },
+  "defaultsystemprompt": {
+   "name": "defaultSystemPrompt",
+   "category": "prompts",
+   "description": "Default system prompt."
+  },
+  "instructsystem": {
+   "name": "instructSystemPrompt",
+   "category": "prompts",
+   "description": "Default system prompt."
+  },
+  "instructsystemprompt": {
+   "name": "instructSystemPrompt",
+   "category": "prompts",
+   "description": "Default system prompt."
+  },
+  "systemprompt": {
+   "name": "systemPrompt",
+   "category": "prompts",
+   "description": "Active system prompt text (optionally overridden by character prompt)"
+  },
+  "exampleseparator": {
+   "name": "exampleSeparator",
+   "category": "prompts",
+   "description": "Separator used between example chat blocks in text completion prompts."
+  },
+  "chatseparator": {
+   "name": "chatSeparator",
+   "category": "prompts",
+   "description": "Separator used between example chat blocks in text completion prompts."
+  },
+  "chatstart": {
+   "name": "chatStart",
+   "category": "prompts",
+   "description": "Chat start marker used in text completion prompts."
+  },
+  "authorsnote": {
+   "name": "authorsNote",
+   "category": "prompts",
+   "description": "The contents of the Author's Note"
+  },
+  "charauthorsnote": {
+   "name": "charAuthorsNote",
+   "category": "prompts",
+   "description": "The contents of the Character Author's Note"
+  },
+  "defaultauthorsnote": {
+   "name": "defaultAuthorsNote",
+   "category": "prompts",
+   "description": "The contents of the Default Author's Note"
+  },
+  "reasoningprefix": {
+   "name": "reasoningPrefix",
+   "category": "prompts",
+   "description": "The prefix string used before reasoning blocks"
+  },
+  "reasoningsuffix": {
+   "name": "reasoningSuffix",
+   "category": "prompts",
+   "description": "The suffix string used after reasoning blocks"
+  },
+  "reasoningseparator": {
+   "name": "reasoningSeparator",
+   "category": "prompts",
+   "description": "The separator between thinking content and response"
+  }
+ },
+ "probeInfo": {
+  "chatLength": 6,
+  "types": [
+   "normal",
+   "continue",
+   "impersonate",
+   "swipe",
+   "regenerate",
+   "quiet"
+  ],
+  "cardOverride": true,
+  "notes": [
+   "探针角色「PD Probe」：角色字段、用户人设、示例对话、6 条聊天消息均为唯一标记，用于归因；每种生成类型运行两次 dry-run（带 Prompt 标记 / 原样）。",
+   "dry-run 在 ST 组装请求后、调用 API 前返回；之后由 sendOpenAIRequest 与服务端完成的供应商格式转换（如 Claude/Gemini 的 system 处理、assistant_prefill）不在本报告范围内。",
+   "dry-run 下 swipe/regenerate 不会删除最后一条消息（script.js 中以 !dryRun 保护），因此这两种类型的聊天内容比真实生成多一条；Prompt 触发与位置规则不受影响。",
+   "探针未提供世界书、作者注释、扩展注入；相关占位符显示为“无运行时数据”。",
+   "角色卡覆盖是否启用取决于用户设置 prefer_character_prompt=true / prefer_character_jailbreak=true（当前值）。"
+  ]
+ }
+}
